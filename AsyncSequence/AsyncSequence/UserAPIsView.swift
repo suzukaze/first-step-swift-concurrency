@@ -52,7 +52,7 @@ final class UserAPIsViewModel: ObservableObject {
         enterForegroundTask = Task {
             let willEnterForeground = notificationCenter.notifications(named: UIApplication.willEnterForegroundNotification)
 
-            for await notification in willEnterForeground {
+            for await notification in willEnterForeground.map({ $0.name }) {
                 print(notification)
             }
         }
@@ -60,7 +60,7 @@ final class UserAPIsViewModel: ObservableObject {
         enterBackgroundTask = Task {
             let didEnterBackground = notificationCenter.notifications(named: UIApplication.didEnterBackgroundNotification)
 
-            for await notification in didEnterBackground {
+            for await notification in didEnterBackground.map({ $0.name }) {
                 print(notification)
             }
         }
