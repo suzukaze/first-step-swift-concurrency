@@ -62,7 +62,7 @@ final class AsyncLetViewModel {
 
     func showAllFriends() {
         Task {
-            await TimeTracker.track {
+            await TimeTracker.track { @Sendable in
                 do {
                     let allFriends = try await fetchAllFriends()
                     print(allFriends)
@@ -75,18 +75,20 @@ final class AsyncLetViewModel {
 
     func runVoid() {
         Task {
-            async let result1: Void = sendLogs()
-            async let result2: Void = sendLogs()
-            await result1
-            await result2
+            await TimeTracker.track { @Sendable in
+                async let result1: Void = sendLogs()
+                async let result2: Void = sendLogs()
+                await result1
+                await result2
+            }
         }
     }
 
     func noMarkAwait() {
         Task {
-            await TimeTracker.track {
-                async let friends = fetchFriends()
-                async let articles = fetchArticles()
+            await TimeTracker.track { @Sendable in
+                async let _ = fetchFriends()
+                async let _ = fetchArticles()
                 // 変数をawaitしないとすぐにリターンされる
             }
         }
